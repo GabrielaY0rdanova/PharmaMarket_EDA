@@ -201,11 +201,12 @@ This dataset is used for educational purposes and to demonstrate EDA workflows.
 
 ## 👩‍💻 About Me
 
-Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). I have 10 years of experience in pharmacy, which gives me genuine domain expertise in pharmaceutical data and a deep interest in making that data structured, accessible, and useful.
+Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). 
+Having spent years working in pharmacy, I find this dataset genuinely interesting — 
+the patterns here reflect a real market I understand well. This project is the analytical 
+payoff of the pipeline: clean data, meaningful questions, and SQL to answer them.
 
-This project demonstrates my skills in **SQL, exploratory data analysis, CTEs, window functions, and data segmentation** through a real-world pharmaceutical dataset.
-
-*This project is part of my portfolio showcasing data analytics skills.*
+*This project is part of my portfolio showcasing data analytics and EDA skills.*
 
 ---
 

@@ -1,0 +1,114 @@
+﻿Dosage_Form_ID,Dosage_Form_Name
+1,Bolus Tablet
+2,Capsule
+3,Capsule (Controlled Release)
+4,Capsule (Delayed Release)
+5,Capsule (Extended Release)
+6,Capsule (Modified Release)
+7,Capsule (Sustained Release)
+8,Capsule (Timed Release)
+9,Chewable Tablet
+10,Chewing Gum Tablet
+11,Cream
+12,Dental Gel
+13,Dialysis Solution
+14,Dispersible Tablet
+15,Ear Drop
+16,Effervescent Granules
+17,Effervescent Powder
+18,Effervescent Tablet
+19,Emulsion for Infusion
+20,Eye Capsule
+21,Flash Tablet
+22,Gel
+23,Hand Rub
+24,IM Injection
+25,IM/IA Injection
+26,IM/IV Injection
+27,IM/SC Injection
+28,Inhalation Capsule
+29,Inhaler
+30,Injection
+31,Intra-articular Injection
+32,Intracameral Injection
+33,Intraspinal Injection
+34,Intratracheal Suspension
+35,Intravitreal Injection
+36,Irrigation Solution
+37,IV Infusion
+38,IV Injection
+39,IV Injection or Infusion
+40,IV/SC Injection
+41,Liquid
+42,Liquid Cleanser Soap
+43,Long Acting Injection
+44,Long Acting Tablet
+45,Lotion
+46,Medicated Bar
+47,Microgranules
+48,Mouthwash
+49,MUPS Tablet
+50,Muscle Rub
+51,Nail Lacquer
+52,Nasal Drop
+53,Nasal Ointment
+54,Nasal Spray
+55,Nebuliser Solution
+56,Nebuliser Suspension
+57,Ocular Spray
+58,Ointment
+59,Ophthalmic Emulsion
+60,Ophthalmic Gel
+61,Ophthalmic Ointment
+62,Ophthalmic Solution
+63,Ophthalmic Suspension
+64,Oral Emulsion
+65,Oral Gel
+66,Oral Paste
+67,Oral Powder
+68,Oral Soluble Film
+69,Oral Solution
+70,Oral Suspension
+71,OROS Tablet
+72,Pediatric Drops
+73,Powder for Injection
+74,Powder for Solution
+75,Powder for Suspension
+76,Rectal Ointment
+77,Rectal Saline
+78,Respirator Solution
+79,Retard Tablet
+80,SC Injection
+81,Scalp Lotion
+82,Scalp Ointment
+83,Scalp Solution
+84,Shampoo
+85,Solution
+86,Solution for Inhalation
+87,Sprinkle Capsule
+88,Sublingual Tablet
+89,Suppository
+90,Surgical Scrub
+91,Syrup
+92,Tablet
+93,Tablet (Controlled Release)
+94,Tablet (Delayed Release)
+95,Tablet (Enteric Coated)
+96,Tablet (Extended Release)
+97,Tablet (Immediate Release)
+98,Tablet (Modified Release)
+99,Tablet (Prolonged Release)
+100,Tablet (Sustained Release)
+101,Topical Gel
+102,Topical Powder
+103,Topical Solution
+104,Topical Spray
+105,Topical Suspension
+106,Transdermal Patch
+107,Vaginal Cream
+108,Vaginal Gel
+109,Vaginal Pessary
+110,Vaginal Suppository
+111,Vaginal Tablet
+112,Viscoelastic Solution
+113,Viscous Eye Drop

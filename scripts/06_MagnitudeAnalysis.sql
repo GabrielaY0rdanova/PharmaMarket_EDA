@@ -25,6 +25,24 @@ GROUP BY df.dosage_form_name
 ORDER BY medicine_count DESC;
 
 -- ==========================
+-- MEDICINES BY DRUG CLASS
+-- Count number of medicines
+-- in each drug class
+-- Order by highest count first
+-- ==========================
+
+SELECT
+    dc.drug_class_name AS drug_class,
+    COUNT(m.brand_id) AS medicine_count
+FROM medicine m
+JOIN generic g
+    ON m.generic_id = g.generic_id
+JOIN drug_class dc
+    ON g.drug_class_id = dc.drug_class_id
+GROUP BY dc.drug_class_name
+ORDER BY medicine_count DESC;
+
+-- ==========================
 -- MEDICINES BY MANUFACTURER
 -- Count the number of medicines per manufacturer
 -- Order by highest count first
@@ -101,6 +119,22 @@ JOIN medicine_package_size ps
     ON m.brand_id = ps.brand_id
 GROUP BY m.brand_id, m.brand_name
 ORDER BY package_options_count DESC;
+
+-- ==========================
+-- BRANDS PER GENERIC
+-- Count how many medicines (brands)
+-- exist for each generic
+-- Order by highest brand count first
+-- ==========================
+
+SELECT 
+    g.generic_name AS generic,
+    COUNT(m.brand_id) AS brand_count
+FROM generic g
+JOIN medicine m
+    ON g.generic_id = m.generic_id
+GROUP BY g.generic_name
+ORDER BY brand_count DESC;
 
 -- ==========================
 -- MEDICINES BY CONTAINER TYPE

@@ -10,11 +10,31 @@
 ## 📖 Overview
 
 This project performs a **structured Exploratory Data Analysis** on the cleaned PharmaMarket dataset.  
-It explores the distribution, magnitude, rankings, pricing and segmentation of medicines, generics and manufacturers in the Bangladeshi pharmaceutical market through modular analytical SQL scripts.
+It investigates the structure, competition, pricing patterns and market composition of medicines, generics and manufacturers in the Bangladeshi pharmaceutical market using modular analytical SQL scripts.
 
 The analysis is built on top of the cleaned database produced in [PharmaMarket_Cleaning](https://github.com/GabrielaY0rdanova/PharmaMarket_Cleaning), migrated to PostgreSQL for this project.
 
----
+## 📊 Key Analytical Questions
+
+This exploratory analysis focuses on understanding the structure, competition and pricing patterns of the pharmaceutical market. The analysis aims to answer the following questions:
+
+- Which therapeutic classes dominate the pharmaceutical market?
+- Which manufacturers produce the most medicines?
+- How competitive are different generics (how many brands exist per generic)?
+- What dosage forms are most commonly used?
+- How are medicines priced across the market?
+- How concentrated is the manufacturer landscape?
+- How diverse are manufacturer portfolios across drug classes?
+
+## 🎯 What This Project Demonstrates
+
+This project showcases an end-to-end analytical workflow including:
+
+- Designing and analysing a **relational pharmaceutical database** using PostgreSQL
+- Performing **structured exploratory data analysis (EDA)** using modular SQL scripts
+- Applying analytical techniques such as **ranking, segmentation, magnitude analysis and part-to-whole analysis**
+- Writing **clean, documented and reproducible SQL workflows**
+- Preparing analytical outputs that will be used for **interactive Tableau data visualisation**
 
 ## 🔗 Related Projects
 
@@ -66,8 +86,6 @@ PharmaMarket_EDA/
 └── README.md
 ```
 
----
-
 ## 🏗️ Database Schema
 
 The database contains 9 tables migrated from SQL Server to PostgreSQL. Column names use snake_case following PostgreSQL conventions. Slug columns were excluded from the migration as they are not needed for analysis.
@@ -87,8 +105,6 @@ The database contains 9 tables migrated from SQL Server to PostgreSQL. Column na
 | medicine_package_size | 14,349 |
 | medicine_package_container | 22,707 |
 | generic_indication | 1,608 |
-
----
 
 ## 🔄 EDA Workflow
 
@@ -121,19 +137,36 @@ Execute the analysis scripts in order:
 9. `11_ReportMedicines.sql`
 10. `12_ReportManufacturers.sql`
 
----
-
 ## 🔍 Key Findings
 
-- The dataset contains **21,708 medicines** produced by **240 manufacturers** across **113 dosage forms**
-- **Tablet** is the most common dosage form, accounting for the majority of medicines in the dataset
-- The majority of medicines are **allopathic** with a small proportion being herbal
-- **Unit-Priced** is the most common container type (13,496 records), representing medicines priced per individual unit rather than per physical container
-- Pack prices range from **10.20 to 278,400.00**, with an average of **840.73**
-- Unit prices range up to **8,976.66**, with an average of **69.79**
-- Most manufacturers have a **small portfolio** (1–10 medicines), with a small number of large manufacturers dominating market volume
+### Market Structure
+- The dataset contains **21,708 medicines** produced by **240 manufacturers**, covering **1,711 generics** across **422 drug classes**
+- Medicines are distributed across **113 dosage forms**, with **tablet** being the dominant form in the dataset
+- The vast majority of medicines are **allopathic**, with only a small proportion classified as herbal
 
----
+### Manufacturer Landscape
+- Most manufacturers have **small portfolios (1–10 medicines)**, indicating a highly fragmented producer landscape
+- A relatively small number of manufacturers produce **large portfolios of medicines**, dominating overall market volume
+- Manufacturer portfolios vary in **therapeutic diversity**, with some companies covering a wide range of drug classes while others specialise in only a few
+
+### Therapeutic Coverage
+- Drug classes differ significantly in the number of generics they contain, with some therapeutic areas having **many competing generics** while others remain relatively sparse
+- Each generic in the dataset maps to **at most one indication**, which is a limitation of the source data rather than a reflection of real-world pharmaceutical usage
+
+### Generic Competition
+- The number of **brands per generic** varies widely, indicating different levels of **market competition**
+- Some generics have **many competing brands**, suggesting highly competitive markets, while others appear with **only one or a few branded medicines**
+- Generics can be segmented by **competition level** based on the number of branded medicines available, revealing a mix of **monopolistic, low-competition and highly competitive markets**
+
+### Packaging and Product Variants
+- Many medicines are available in **multiple package size options**, indicating variation in dosing or consumer packaging formats
+- **Unit-Priced** is the most common container type (13,496 records), representing medicines priced per individual unit rather than by container
+
+### Pricing Patterns
+- **Pack prices** range from **10.20 to 278,400.00**, with an average of **840.73**
+- **Unit prices** reach up to **8,976.66**, with an average of **69.79**
+- Medicines can be segmented into **Low, Medium, High, and Premium price ranges**, with the majority falling into the lower and medium pricing tiers
+- Pricing levels vary across **drug classes and dosage forms**, suggesting differences in therapeutic complexity and production cost
 
 ## ⚠️ Dataset Limitations
 
@@ -143,8 +176,6 @@ Execute the analysis scripts in order:
 | Medicines with no linked manufacturer (NULL manufacturer_id) | 147 | Documented — not fixable from source data |
 | Unit-Priced container records with NULL unit price | 39 | Documented — accepted as-is |
 | Generics with more than one indication | 0 | Dataset limitation — each generic maps to at most one indication |
-
----
 
 ## 📂⚡ File Path Configuration (Important)
 
@@ -170,8 +201,6 @@ FROM 'C:/Your/Path/To/PharmaMarket_EDA/source_data/drug_class.csv'
 
 > ⚠️ PostgreSQL `COPY` requires **forward slashes** in file paths, even on Windows.
 
----
-
 ## 🛠️ Technologies Used
 
 - **PostgreSQL** — database engine for all EDA queries
@@ -179,15 +208,11 @@ FROM 'C:/Your/Path/To/PharmaMarket_EDA/source_data/drug_class.csv'
 - **Python 3 / pandas / pyodbc** — CSV export from SQL Server source database
 - **VS Code with SQLTools** — preferred PostgreSQL client
 
----
-
 ## 🚀 Upcoming Projects
 
 This EDA project is part of a series built on the PharmaMarketAnalytics database:
 
 - 📊 **Data Visualization** — An interactive Tableau dashboard presenting key insights from the EDA, including drug distribution, manufacturer market share, and pricing trends.
-
----
 
 ## 📚 Data Source
 
@@ -197,18 +222,15 @@ The source CSV files were obtained from the Kaggle dataset:
 
 This dataset is used for educational purposes and to demonstrate EDA workflows.
 
----
-
 ## 👩‍💻 About Me
 
-Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). 
+Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). Check out my full portfolio 🗂️ [here](https://gabrielay0rdanova.github.io/).
+
 Having spent years working in pharmacy, I find this dataset genuinely interesting — 
 the patterns here reflect a real market I understand well. This project is the analytical 
 payoff of the pipeline: clean data, meaningful questions, and SQL to answer them.
 
 *This project is part of my portfolio showcasing data analytics and EDA skills.*
-
----
 
 ## 🛡️ License
 

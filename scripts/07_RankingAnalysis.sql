@@ -40,6 +40,26 @@ ORDER BY medicine_count ASC
 LIMIT 10;
 
 -- ==========================
+-- MANUFACTURERS BY DRUG CLASS COVERAGE
+-- Number of distinct drug classes
+-- represented in each manufacturer's portfolio
+-- Order by highest coverage first
+-- ==========================
+
+SELECT
+    mfr.manufacturer_name AS manufacturer,
+    COUNT(DISTINCT dc.drug_class_id) AS drug_class_count
+FROM manufacturer mfr
+JOIN medicine m
+    ON mfr.manufacturer_id = m.manufacturer_id
+JOIN generic g
+    ON m.generic_id = g.generic_id
+JOIN drug_class dc
+    ON g.drug_class_id = dc.drug_class_id
+GROUP BY mfr.manufacturer_name
+ORDER BY drug_class_count DESC;
+
+-- ==========================
 -- TOP 10 DRUG CLASSES BY GENERIC COUNT
 -- The 10 drug classes with the most generics
 -- ==========================
@@ -96,3 +116,25 @@ JOIN medicine m
 GROUP BY df.dosage_form_name
 ORDER BY medicine_count DESC
 LIMIT 10;
+
+-- ==========================
+-- DRUG CLASSES BY AVERAGE PACK PRICE
+-- Average, minimum and maximum pack price
+-- for medicines in each drug class
+-- Order by highest average price first
+-- ==========================
+
+SELECT 
+    dc.drug_class_name AS drug_class,
+    ROUND(AVG(ps.pack_price), 2) AS avg_pack_price,
+    MIN(ps.pack_price) AS min_pack_price,
+    MAX(ps.pack_price) AS max_pack_price
+FROM medicine m
+JOIN generic g 
+    ON m.generic_id = g.generic_id
+JOIN drug_class dc 
+    ON g.drug_class_id = dc.drug_class_id
+JOIN medicine_package_size ps
+    ON m.brand_id = ps.brand_id
+GROUP BY dc.drug_class_name
+ORDER BY avg_pack_price DESC;

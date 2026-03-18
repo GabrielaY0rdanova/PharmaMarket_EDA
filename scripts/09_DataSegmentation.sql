@@ -59,6 +59,26 @@ GROUP BY price_range
 ORDER BY medicine_count DESC;
 
 -- ==========================
+-- AVERAGE PACK PRICE BY DOSAGE FORM
+-- Compare pricing levels across
+-- different dosage forms
+-- Order by highest average price first
+-- ==========================
+
+SELECT
+    df.dosage_form_name AS dosage_form,
+    ROUND(AVG(ps.pack_price), 2) AS avg_pack_price,
+    MIN(ps.pack_price) AS min_pack_price,
+    MAX(ps.pack_price) AS max_pack_price
+FROM medicine m
+JOIN dosage_form df
+    ON m.dosage_form_id = df.dosage_form_id
+JOIN medicine_package_size ps
+    ON m.brand_id = ps.brand_id
+GROUP BY df.dosage_form_name
+ORDER BY avg_pack_price DESC;
+
+-- ==========================
 -- GENERICS BY DRUG CLASS SIZE
 -- Segment drug classes by how many generics they contain
 -- Small:  1 - 5 generics
@@ -110,3 +130,34 @@ FROM (
 ) sub
 GROUP BY portfolio_size
 ORDER BY manufacturer_count DESC;
+
+-- ==========================
+-- GENERIC MARKET COMPETITION
+-- Segment generics based on how many
+-- branded medicines exist for each generic
+--
+-- Monopoly:        1 brand
+-- Low Competition: 2 - 5 brands
+-- Medium:          6 - 15 brands
+-- High:            > 15 brands
+-- ==========================
+
+SELECT
+    CASE
+        WHEN brand_count = 1              THEN 'Monopoly'
+        WHEN brand_count BETWEEN 2 AND 5  THEN 'Low Competition'
+        WHEN brand_count BETWEEN 6 AND 15 THEN 'Moderate Competition'
+        ELSE                                   'High Competition'
+    END AS competition_level,
+    COUNT(*) AS generic_count
+FROM (
+    SELECT
+        g.generic_id,
+        COUNT(m.brand_id) AS brand_count
+    FROM generic g
+    JOIN medicine m
+        ON g.generic_id = m.generic_id
+    GROUP BY g.generic_id
+) sub
+GROUP BY competition_level
+ORDER BY generic_count DESC;

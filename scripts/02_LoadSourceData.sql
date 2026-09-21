@@ -10,17 +10,13 @@
 --   to generate the CSV snapshots
 --
 -- USAGE:
--- 1. Update the file path in each COPY statement
---    to match the location of source_data/ on your
---    local machine
--- 2. Run this script in your preferred PostgreSQL client
---    (VS Code with SQLTools, pgAdmin, or psql)
+-- Run through run_full_eda.sql with psql. The runner builds
+-- all file paths from its source_data_dir variable.
 --
 -- NOTES:
--- PostgreSQL COPY requires absolute file paths with
--- forward slashes. Update the path below to match
--- your local setup:
---   E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data
+-- PostgreSQL COPY reads the files on the database server.
+-- For this local setup, PostgreSQL and the CSV files are on
+-- the same Windows machine.
 --
 -- CSV files were exported with utf-8-sig encoding
 -- (BOM marker) for SQL Server compatibility. PostgreSQL
@@ -33,50 +29,48 @@
 -- Load in FK dependency order (parents before children)
 -- ==========================
 
+\if :{?source_data_dir}
+\else
+    \echo 'source_data_dir is required. Run this script through run_full_eda.sql.'
+    \quit 3
+\endif
+
+\set drug_class_file :source_data_dir '/Drug_Class.csv'
+\set dosage_form_file :source_data_dir '/Dosage_Form.csv'
+\set manufacturer_file :source_data_dir '/Manufacturer.csv'
+\set indication_file :source_data_dir '/Indication.csv'
+\set generic_file :source_data_dir '/Generic.csv'
+\set medicine_file :source_data_dir '/Medicine.csv'
+\set package_size_file :source_data_dir '/Medicine_PackageSize.csv'
+\set package_container_file :source_data_dir '/Medicine_PackageContainer.csv'
+\set generic_indication_file :source_data_dir '/Generic_Indication.csv'
+
 -- Drug_Class
-COPY drug_class (drug_class_id, drug_class_name)
-FROM 'E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data/Drug_Class.csv'
-WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
+COPY drug_class (drug_class_id, drug_class_name) FROM :'drug_class_file' WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
 
 -- Dosage_Form
-COPY dosage_form (dosage_form_id, dosage_form_name)
-FROM 'E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data/Dosage_Form.csv'
-WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
+COPY dosage_form (dosage_form_id, dosage_form_name) FROM :'dosage_form_file' WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
 
 -- Manufacturer
-COPY manufacturer (manufacturer_id, manufacturer_name)
-FROM 'E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data/Manufacturer.csv'
-WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
+COPY manufacturer (manufacturer_id, manufacturer_name) FROM :'manufacturer_file' WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
 
 -- Indication
-COPY indication (indication_id, indication_name)
-FROM 'E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data/Indication.csv'
-WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
+COPY indication (indication_id, indication_name) FROM :'indication_file' WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
 
 -- Generic
-COPY generic (generic_id, generic_name, drug_class_id)
-FROM 'E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data/Generic.csv'
-WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
+COPY generic (generic_id, generic_name, drug_class_id) FROM :'generic_file' WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
 
 -- Medicine
-COPY medicine (brand_id, brand_name, type, dosage_form_id, generic_id, strength, manufacturer_id)
-FROM 'E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data/Medicine.csv'
-WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
+COPY medicine (brand_id, brand_name, type, dosage_form_id, generic_id, strength, manufacturer_id) FROM :'medicine_file' WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
 
 -- Medicine_PackageSize
-COPY medicine_package_size (package_size_id, brand_id, pack_size, pack_price)
-FROM 'E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data/Medicine_PackageSize.csv'
-WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
+COPY medicine_package_size (package_size_id, brand_id, pack_size, pack_price) FROM :'package_size_file' WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
 
 -- Medicine_PackageContainer
-COPY medicine_package_container (package_container_id, brand_id, container_size, unit_price, container_type)
-FROM 'E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data/Medicine_PackageContainer.csv'
-WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
+COPY medicine_package_container (package_container_id, brand_id, container_size, unit_price, container_type) FROM :'package_container_file' WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
 
 -- Generic_Indication
-COPY generic_indication (generic_indication_id, generic_id, indication_id)
-FROM 'E:/Data Analysis/My Projects/PharmaMarket_EDA/source_data/Generic_Indication.csv'
-WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
+COPY generic_indication (generic_indication_id, generic_id, indication_id) FROM :'generic_indication_file' WITH (FORMAT CSV, HEADER TRUE, ENCODING 'UTF8');
 
 
 -- ==========================

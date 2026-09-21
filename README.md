@@ -1,237 +1,185 @@
-# 🔍 PharmaMarket_EDA
+# PharmaMarket EDA
 
-## 🏷️ Project Badges
-
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?logo=postgresql&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-blue?logo=postgresql&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white)
-![Kaggle](https://img.shields.io/badge/Kaggle-Dataset-orange?logo=kaggle&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-## 📖 Overview
+## Overview
 
-This project performs a **structured Exploratory Data Analysis** on the cleaned PharmaMarket dataset.  
-It investigates the structure, competition, pricing patterns and market composition of medicines, generics and manufacturers in the Bangladeshi pharmaceutical market using modular analytical SQL scripts.
+This project explores a cleaned dataset of medicines sold in Bangladesh. It uses PostgreSQL to analyse market structure, manufacturer portfolios, generic competition, dosage forms, packaging, and prices.
 
-The analysis is built on top of the cleaned database produced in [PharmaMarket_Cleaning](https://github.com/GabrielaY0rdanova/PharmaMarket_Cleaning), migrated to PostgreSQL for this project.
+The repository is the third stage of the PharmaMarket Data Platform:
 
-## 📊 Key Analytical Questions
+1. [PharmaMarket_ETL](https://github.com/GabrielaY0rdanova/PharmaMarket_ETL) builds the relational SQL Server database.
+2. [PharmaMarket_Cleaning](https://github.com/GabrielaY0rdanova/PharmaMarket_Cleaning) cleans and validates the source tables.
+3. PharmaMarket_EDA migrates a snapshot to PostgreSQL and runs the analysis.
+4. [PharmaMarket_Visualization](https://github.com/GabrielaY0rdanova/PharmaMarket_Visualization) presents selected findings in Tableau.
 
-This exploratory analysis focuses on understanding the structure, competition and pricing patterns of the pharmaceutical market. The analysis aims to answer the following questions:
+I used SQL Server for the ETL and cleaning stages, then PostgreSQL and VS Code for EDA. This shows the same relational model working across two database platforms.
 
-- Which therapeutic classes dominate the pharmaceutical market?
-- Which manufacturers produce the most medicines?
-- How competitive are different generics (how many brands exist per generic)?
-- What dosage forms are most commonly used?
-- How are medicines priced across the market?
-- How concentrated is the manufacturer landscape?
-- How diverse are manufacturer portfolios across drug classes?
+## Analytical Scope
 
-## 🎯 What This Project Demonstrates
+The SQL scripts answer these questions:
 
-This project showcases an end-to-end analytical workflow including:
+- Which drug classes, dosage forms, and manufacturers contain the most medicines?
+- How many competing brands exist for each generic?
+- How broad are manufacturer portfolios across generics and drug classes?
+- How do pack and unit prices vary across product groups?
+- Which medicines, manufacturers, and drug classes rank highest by selected measures?
+- How can medicines, generics, and manufacturers be grouped into practical segments?
 
-- Designing and analysing a **relational pharmaceutical database** using PostgreSQL
-- Performing **structured exploratory data analysis (EDA)** using modular SQL scripts
-- Applying analytical techniques such as **ranking, segmentation, magnitude analysis and part-to-whole analysis**
-- Writing **clean, documented and reproducible SQL workflows**
-- Preparing analytical outputs that will be used for **interactive Tableau data visualisation**
+The reports retain missing relationships where they affect totals. For example, manufacturer and dosage-form shares include an `Unknown` group instead of silently excluding unmatched medicines.
 
-## 🔗 Related Projects
+## Dataset
 
-This project is the **third stage** of the PharmaMarket portfolio series:
-
-👉 **[PharmaMarket_ETL](https://github.com/GabrielaY0rdanova/PharmaMarket_ETL)** — ETL pipeline from raw CSV files into a structured SQL Server database  
-👉 **[PharmaMarket_Cleaning](https://github.com/GabrielaY0rdanova/PharmaMarket_Cleaning)** — Data cleaning and quality validation on the ETL output
-
-**If you have already run the Cleaning project**, `PharmaMarketAnalytics_Clean` is already populated on your machine. Run `01_ExportSourceData.py` to export the data to CSV, then run `00_InitDatabase.sql` and `02_LoadSourceData.sql` to set up the PostgreSQL database.
-
-**If you have not run the Cleaning project**, the `source_data/` folder in this repository already contains the pre-exported CSV snapshots. Start from `00_InitDatabase.sql` and run `02_LoadSourceData.sql` to load directly.
-
----
-
-## 🗂️ Project Structure
-
-```
-PharmaMarket_EDA/
-│
-├── docs/                              # Documentation and visuals
-│   └── Pharma_ERD.png                 # Entity Relationship Diagram
-│
-├── source_data/                       # CSV snapshots exported from PharmaMarketAnalytics_Clean
-│   ├── Drug_Class.csv
-│   ├── Dosage_Form.csv
-│   ├── Manufacturer.csv
-│   ├── Indication.csv
-│   ├── Generic.csv
-│   ├── Medicine.csv
-│   ├── Medicine_PackageSize.csv
-│   ├── Medicine_PackageContainer.csv
-│   └── Generic_Indication.csv
-│
-├── scripts/                           # SQL and Python scripts
-│   ├── 01_ExportSourceData.py         # Exports cleaned data from SQL Server to CSV
-│   ├── 00_InitDatabase.sql            # Creates all 9 tables in PostgreSQL
-│   ├── 02_LoadSourceData.sql          # Loads CSVs into PostgreSQL using COPY
-│   ├── 03_DatabaseExploration.sql     # Lists tables, columns and row counts
-│   ├── 04_DimensionsExploration.sql   # Explores dimension tables and NULL checks
-│   ├── 05_MeasuresExploration.sql     # Summary statistics for prices
-│   ├── 06_MagnitudeAnalysis.sql       # Counts and distributions across key entities
-│   ├── 07_RankingAnalysis.sql         # Top and bottom rankings by count and price
-│   ├── 08_PartToWholeAnalysis.sql     # Percentage distributions across categories
-│   ├── 09_DataSegmentation.sql        # Segments medicines and manufacturers into groups
-│   ├── 10_ReportGenerics.sql          # Comprehensive generics report using CTEs
-│   ├── 11_ReportMedicines.sql         # Comprehensive medicines report using CTEs
-│   └── 12_ReportManufacturers.sql     # Comprehensive manufacturers report using CTEs
-│
-└── README.md
-```
-
-## 🏗️ Database Schema
-
-The database contains 9 tables migrated from SQL Server to PostgreSQL. Column names use snake_case following PostgreSQL conventions. Slug columns were excluded from the migration as they are not needed for analysis.
-
-![ERD Diagram](docs/Pharma_ERD.png)
-
-### Tables & Row Counts
+The PostgreSQL snapshot contains nine related tables.
 
 | Table | Rows |
+|---|---:|
+| `drug_class` | 422 |
+| `dosage_form` | 113 |
+| `manufacturer` | 240 |
+| `indication` | 2,043 |
+| `generic` | 1,711 |
+| `medicine` | 21,708 |
+| `medicine_package_size` | 14,349 |
+| `medicine_package_container` | 22,707 |
+| `generic_indication` | 1,608 |
+
+![PharmaMarket entity relationship diagram](docs/Pharma_ERD.png)
+
+The original data comes from the Kaggle dataset [Assorted Medicine Dataset of Bangladesh](https://www.kaggle.com/datasets/ahmedshahriarsakib/assorted-medicine-dataset-of-bangladesh).
+
+## Project Structure
+
+```text
+PharmaMarket_EDA/
+|-- docs/
+|   `-- Pharma_ERD.png
+|-- source_data/
+|   `-- nine validated CSV snapshots
+|-- scripts/
+|   |-- 00_InitDatabase.sql
+|   |-- 01_ExportSourceData.py
+|   |-- 02_LoadSourceData.sql
+|   |-- 03_DatabaseExploration.sql
+|   |-- 04_DimensionsExploration.sql
+|   |-- 05_MeasuresExploration.sql
+|   |-- 06_MagnitudeAnalysis.sql
+|   |-- 07_RankingAnalysis.sql
+|   |-- 08_PartToWholeAnalysis.sql
+|   |-- 09_DataSegmentation.sql
+|   |-- 10_ReportGenerics.sql
+|   |-- 11_ReportMedicines.sql
+|   `-- 12_ReportManufacturers.sql
+|-- tests/
+|   |-- 13_ValidationGate.sql
+|   `-- test_eda_contract.py
+|-- run_full_eda.sql
+|-- run_all_analysis.sql
+|-- run_validation.sql
+`-- README.md
+```
+
+## Reproducible Workflow
+
+### 1. Optional SQL Server export
+
+The committed files in `source_data/` are ready to load. Export a new snapshot only when the cleaned SQL Server database changes.
+
+The exporter reads these optional environment variables:
+
+| Variable | Default |
 |---|---|
-| drug_class | 422 |
-| dosage_form | 113 |
-| manufacturer | 240 |
-| indication | 2,043 |
-| generic | 1,711 |
-| medicine | 21,708 |
-| medicine_package_size | 14,349 |
-| medicine_package_container | 22,707 |
-| generic_indication | 1,608 |
+| `PHARMAMARKET_SQL_SERVER` | `DESKTOP-SJC0GQV\SQLEXPRESS` |
+| `PHARMAMARKET_CLEAN_DATABASE` | `PharmaMarketAnalytics_Clean_Test` |
+| `PHARMAMARKET_ODBC_DRIVER` | `ODBC Driver 17 for SQL Server` |
+| `PHARMAMARKET_EDA_SOURCE_DIR` | repository `source_data` directory |
 
-## 🔄 EDA Workflow
+Run:
 
-### Step 1 — Export source data *(skip if you have not run the Cleaning project)*
-
-Run `01_ExportSourceData.py` to export the cleaned data from `PharmaMarketAnalytics_Clean` (SQL Server) into the `source_data/` folder as CSV files.
-
-> ⚠️ **Only needed if you have run the Cleaning project locally.** If you have not, the `source_data/` folder already contains the pre-exported CSVs — skip this step and go straight to Step 2.
-
-### Step 2 — Initialise the database
-
-Run `00_InitDatabase.sql` in your preferred PostgreSQL client to create all 9 tables in the `PharmaMarketAnalytics_EDA` database.
-
-### Step 3 — Load source data
-
-Run `02_LoadSourceData.sql` to load the CSV files into PostgreSQL using `COPY`.
-
-### Step 4 — Run analysis scripts
-
-Execute the analysis scripts in order:
-
-1. `03_DatabaseExploration.sql`
-2. `04_DimensionsExploration.sql`
-3. `05_MeasuresExploration.sql`
-4. `06_MagnitudeAnalysis.sql`
-5. `07_RankingAnalysis.sql`
-6. `08_PartToWholeAnalysis.sql`
-7. `09_DataSegmentation.sql`
-8. `10_ReportGenerics.sql`
-9. `11_ReportMedicines.sql`
-10. `12_ReportManufacturers.sql`
-
-## 🔍 Key Findings
-
-### Market Structure
-- The dataset contains **21,708 medicines** produced by **240 manufacturers**, covering **1,711 generics** across **422 drug classes**
-- Medicines are distributed across **113 dosage forms**, with **tablet** being the dominant form in the dataset
-- The vast majority of medicines are **allopathic**, with only a small proportion classified as herbal
-
-### Manufacturer Landscape
-- Most manufacturers have **small portfolios (1–10 medicines)**, indicating a highly fragmented producer landscape
-- A relatively small number of manufacturers produce **large portfolios of medicines**, dominating overall market volume
-- Manufacturer portfolios vary in **therapeutic diversity**, with some companies covering a wide range of drug classes while others specialise in only a few
-
-### Therapeutic Coverage
-- Drug classes differ significantly in the number of generics they contain, with some therapeutic areas having **many competing generics** while others remain relatively sparse
-- Each generic in the dataset maps to **at most one indication**, which is a limitation of the source data rather than a reflection of real-world pharmaceutical usage
-
-### Generic Competition
-- The number of **brands per generic** varies widely, indicating different levels of **market competition**
-- Some generics have **many competing brands**, suggesting highly competitive markets, while others appear with **only one or a few branded medicines**
-- Generics can be segmented by **competition level** based on the number of branded medicines available, revealing a mix of **monopolistic, low-competition and highly competitive markets**
-
-### Packaging and Product Variants
-- Many medicines are available in **multiple package size options**, indicating variation in dosing or consumer packaging formats
-- **Unit-Priced** is the most common container type (13,496 records), representing medicines priced per individual unit rather than by container
-
-### Pricing Patterns
-- **Pack prices** range from **10.20 to 278,400.00**, with an average of **840.73**
-- **Unit prices** reach up to **8,976.66**, with an average of **69.79**
-- Medicines can be segmented into **Low, Medium, High, and Premium price ranges**, with the majority falling into the lower and medium pricing tiers
-- Pricing levels vary across **drug classes and dosage forms**, suggesting differences in therapeutic complexity and production cost
-
-## ⚠️ Dataset Limitations
-
-| Issue | Count | Decision |
-|---|---|---|
-| Medicines with no linked generic (NULL generic_id) | 214 | Documented — not fixable from source data |
-| Medicines with no linked manufacturer (NULL manufacturer_id) | 147 | Documented — not fixable from source data |
-| Unit-Priced container records with NULL unit price | 39 | Documented — accepted as-is |
-| Generics with more than one indication | 0 | Dataset limitation — each generic maps to at most one indication |
-
-## 📂⚡ File Path Configuration (Important)
-
-This project uses a Python export script and PostgreSQL `COPY`, both of which require absolute file paths.
-
-⚠️ **After cloning the repository, update file paths in two places:**
-
-### In `01_ExportSourceData.py`
-
-Update the `OUTPUT_FOLDER` variable:
-
-```
-OUTPUT_FOLDER = r'C:\Your\Path\To\PharmaMarket_EDA\source_data'
+```powershell
+python scripts/01_ExportSourceData.py
 ```
 
-### In `02_LoadSourceData.sql`
+### 2. Create a PostgreSQL test database
 
-Update the path in each `COPY` statement:
+Create an empty database named `PharmaMarketAnalytics_EDA_Test`. The schema script refuses to reset unrelated databases.
 
+```powershell
+& "D:\Programs\Data Analysis\PostgreSQL\bin\createdb.exe" -U postgres PharmaMarketAnalytics_EDA_Test
 ```
-FROM 'C:/Your/Path/To/PharmaMarket_EDA/source_data/drug_class.csv'
+
+### 3. Rebuild and validate
+
+Run the psql workflow from the repository root. Use forward slashes in `source_data_dir`.
+
+```powershell
+& "D:\Programs\Data Analysis\PostgreSQL\bin\psql.exe" `
+  -U postgres `
+  -d PharmaMarketAnalytics_EDA_Test `
+  -v "source_data_dir=E:/Data Analysis/My Projects/PharmaMarket Data Platform/PharmaMarket_EDA/source_data" `
+  -f "run_full_eda.sql"
 ```
 
-> ⚠️ PostgreSQL `COPY` requires **forward slashes** in file paths, even on Windows.
+The runner enables `ON_ERROR_STOP`, performs the reset and load in one transaction, and executes the validation gate before commit. A failure rolls back the rebuild.
+It also sets the PostgreSQL client encoding to UTF-8 so medicine names with Unicode characters display correctly in Windows terminals.
 
-## 🛠️ Technologies Used
+To validate an existing database without rebuilding it:
 
-- **PostgreSQL** — database engine for all EDA queries
-- **SQL** — analytical queries including CTEs, window functions, subqueries and aggregations
-- **Python 3 / pandas / pyodbc** — CSV export from SQL Server source database
-- **VS Code with SQLTools** — preferred PostgreSQL client
+```powershell
+& "D:\Programs\Data Analysis\PostgreSQL\bin\psql.exe" `
+  -U postgres `
+  -d PharmaMarketAnalytics_EDA_Test `
+  -f "run_validation.sql"
+```
 
-## 🚀 Upcoming Projects
+### 4. Run the analysis
 
-This EDA project is part of a series built on the PharmaMarketAnalytics database:
+Open scripts `03` through `12` in VS Code with SQLTools and execute them against the validated EDA database. The scripts cover database profiling, dimensions, measures, magnitude, rankings, part-to-whole analysis, segmentation, and three reusable reports.
 
-- 📊 **Data Visualization** — An interactive Tableau dashboard presenting key insights from the EDA, including drug distribution, manufacturer market share, and pricing trends.
+You can also verify every analysis script with one psql command:
 
-## 📚 Data Source
+```powershell
+& "D:\Programs\Data Analysis\PostgreSQL\bin\psql.exe" `
+  -U postgres `
+  -d PharmaMarketAnalytics_EDA_Test `
+  -f "run_all_analysis.sql"
+```
 
-The source CSV files were obtained from the Kaggle dataset:
+Run the static contract tests with:
 
-[Assorted Medicine Dataset of Bangladesh](https://www.kaggle.com/datasets/ahmedshahriarsakib/assorted-medicine-dataset-of-bangladesh)
+```powershell
+python -m unittest discover -s tests -p "test_*.py" -v
+```
 
-This dataset is used for educational purposes and to demonstrate EDA workflows.
+## Verified Findings
 
-## 👩‍💻 About Me
+- The snapshot contains 21,708 medicines from 240 manufacturers.
+- It covers 1,711 generics, 422 drug classes, and 113 dosage forms.
+- Pack prices range from 10.20 to 278,400.00, with an average of 840.73.
+- Unit prices reach 8,976.66, with an average of 69.79.
+- No generic has more than one linked indication in this source snapshot.
+- Manufacturer, drug class, dosage form, price, and competition reports are available as separate SQL scripts.
 
-Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). Check out my full portfolio 🗂️ [here](https://gabrielay0rdanova.github.io/).
+These figures describe the supplied snapshot. They do not represent the full pharmaceutical market in Bangladesh.
 
-Having spent years working in pharmacy, I find this dataset genuinely interesting — 
-the patterns here reflect a real market I understand well. This project is the analytical 
-payoff of the pipeline: clean data, meaningful questions, and SQL to answer them.
+## Known Data Limitations
 
-*This project is part of my portfolio showcasing data analytics and EDA skills.*
+| Issue | Rows | Treatment |
+|---|---:|---|
+| Medicines without a linked generic | 214 | Retained and documented |
+| Medicines without a linked manufacturer | 147 | Retained as `Unknown` in share analysis |
+| Placeholder container rows without a unit price | 39 | Retained and grouped as `Unknown` where price is required |
+| Generics with more than one linked indication | 0 | Documented as a source-snapshot limitation |
 
-## 🛡️ License
+## Technologies
 
-This project is licensed under the [MIT License](LICENSE.txt) and is available for educational and portfolio purposes.
+- PostgreSQL 18
+- SQL with joins, CTEs, subqueries, window functions, aggregation, ranking, and segmentation
+- Python, pandas, and pyodbc for the optional SQL Server export
+- VS Code with SQLTools for interactive analysis
+
+## License
+
+This project uses the [MIT License](LICENSE.txt).

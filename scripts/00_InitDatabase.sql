@@ -10,7 +10,7 @@
 --
 -- USAGE:
 -- Run this script once before any other scripts.
--- It is safe to re-run -- all tables are dropped and
+-- It is safe to re-run in the named EDA databases. All tables are dropped and
 -- recreated from scratch.
 --
 -- NOTES:
@@ -24,6 +24,18 @@
 -- snake_case, which is the PostgreSQL standard.
 -- =================================================
 
+
+DO $$
+BEGIN
+    IF lower(current_database()) NOT IN (
+        'pharmamarketanalytics_eda',
+        'pharmamarketanalytics_eda_test'
+    ) THEN
+        RAISE EXCEPTION
+            'Refusing destructive reset in database %', current_database();
+    END IF;
+END
+$$;
 
 -- ==========================
 -- DROP TABLES IF EXIST

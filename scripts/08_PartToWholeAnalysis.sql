@@ -30,13 +30,13 @@ ORDER BY medicine_count DESC;
 -- ==========================
 
 SELECT 
-    df.dosage_form_name AS dosage_form,
+    COALESCE(df.dosage_form_name, 'Unknown') AS dosage_form,
     COUNT(m.brand_id) AS medicine_count,
     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS percentage
 FROM medicine m
-JOIN dosage_form df
+LEFT JOIN dosage_form df
     ON m.dosage_form_id = df.dosage_form_id
-GROUP BY df.dosage_form_name
+GROUP BY COALESCE(df.dosage_form_name, 'Unknown')
 ORDER BY medicine_count DESC;
 
 -- ==========================
@@ -46,13 +46,13 @@ ORDER BY medicine_count DESC;
 -- ==========================
 
 SELECT 
-    m.manufacturer_name AS manufacturer,
+    COALESCE(m.manufacturer_name, 'Unknown') AS manufacturer,
     COUNT(med.brand_id) AS medicine_count,
     ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) AS percentage
-FROM medicine med 
-JOIN manufacturer m
+FROM medicine med
+LEFT JOIN manufacturer m
     ON med.manufacturer_id = m.manufacturer_id
-GROUP BY m.manufacturer_name
+GROUP BY COALESCE(m.manufacturer_name, 'Unknown')
 ORDER BY medicine_count DESC;
 
 -- ==========================

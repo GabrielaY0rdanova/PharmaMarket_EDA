@@ -21,6 +21,7 @@
 
 SELECT 
     CASE 
+    WHEN ps.pack_price IS NULL              THEN 'Unknown'
     WHEN ps.pack_price < 100                THEN 'Low'
     WHEN ps.pack_price BETWEEN 100 AND 500  THEN 'Medium'
     WHEN ps.pack_price BETWEEN 500 AND 1000 THEN 'High'

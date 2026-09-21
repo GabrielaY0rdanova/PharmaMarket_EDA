@@ -15,27 +15,32 @@
 # - pyodbc:  pip install pyodbc
 #
 # USAGE:
-# 1. Update SERVER and OUTPUT_FOLDER below
-# 2. Ensure PharmaMarketAnalytics_Clean database is running
-# 3. Run: python 01_ExportSourceData.py
-#    or open in Jupyter Notebook and run all cells
+# 1. Optionally set the PHARMAMARKET_* environment variables
+# 2. Ensure the selected cleaned database is running
+# 3. Run: python scripts/01_ExportSourceData.py
 # =================================================
 
-import pyodbc
-import pandas as pd
 import os
+from pathlib import Path
+
+import pandas as pd
+import pyodbc
 
 # ==========================
 # CONFIGURATION
 # Update these values to match your local setup
 # ==========================
 
-SERVER   = 'localhost'
-DATABASE = 'PharmaMarketAnalytics_Clean'
-
-# Path to the source_data folder in this project
-# Update this to match the location on your machine
-OUTPUT_FOLDER = r'E:\Data Analysis\My Projects\PharmaMarket_EDA\source_data'
+SERVER = os.getenv("PHARMAMARKET_SQL_SERVER", r"DESKTOP-SJC0GQV\SQLEXPRESS")
+DATABASE = os.getenv("PHARMAMARKET_CLEAN_DATABASE", "PharmaMarketAnalytics_Clean_Test")
+ODBC_DRIVER = os.getenv("PHARMAMARKET_ODBC_DRIVER", "ODBC Driver 17 for SQL Server")
+OUTPUT_FOLDER = Path(
+    os.getenv(
+        "PHARMAMARKET_EDA_SOURCE_DIR",
+        Path(__file__).resolve().parents[1] / "source_data",
+    )
+)
+OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
 
 # ==========================
 # CONNECTION
@@ -44,7 +49,7 @@ OUTPUT_FOLDER = r'E:\Data Analysis\My Projects\PharmaMarket_EDA\source_data'
 # ==========================
 
 conn = pyodbc.connect(
-    f'DRIVER={{SQL Server}};'
+    f'DRIVER={{{ODBC_DRIVER}}};'
     f'SERVER={SERVER};'
     f'DATABASE={DATABASE};'
     f'Trusted_Connection=yes;'
@@ -189,7 +194,7 @@ for table_name, query in tables.items():
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')
 
-    output_path = os.path.join(OUTPUT_FOLDER, f'{table_name}.csv')
+    output_path = OUTPUT_FOLDER / f'{table_name}.csv'
     df.to_csv(output_path, index=False, encoding='utf-8-sig')
 
     print(f'{len(df):,} rows exported to {output_path}')

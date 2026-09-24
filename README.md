@@ -92,7 +92,7 @@ The exporter reads these optional environment variables:
 | Variable | Default |
 |---|---|
 | `PHARMAMARKET_SQL_SERVER` | `DESKTOP-SJC0GQV\SQLEXPRESS` |
-| `PHARMAMARKET_CLEAN_DATABASE` | `PharmaMarketAnalytics_Clean_Test` |
+| `PHARMAMARKET_CLEAN_DATABASE` | `PharmaMarketAnalytics_Clean` |
 | `PHARMAMARKET_ODBC_DRIVER` | `ODBC Driver 17 for SQL Server` |
 | `PHARMAMARKET_EDA_SOURCE_DIR` | repository `source_data` directory |
 
@@ -104,10 +104,10 @@ python scripts/01_ExportSourceData.py
 
 ### 2. Create a PostgreSQL test database
 
-Create an empty database named `PharmaMarketAnalytics_EDA_Test`. The schema script refuses to reset unrelated databases.
+Create an empty database named `PharmaMarketAnalytics_EDA`. The schema script refuses to reset unrelated databases.
 
 ```powershell
-& "D:\Programs\Data Analysis\PostgreSQL\bin\createdb.exe" -U postgres PharmaMarketAnalytics_EDA_Test
+& "D:\Programs\Data Analysis\PostgreSQL\bin\createdb.exe" -U postgres PharmaMarketAnalytics_EDA
 ```
 
 ### 3. Rebuild and validate
@@ -117,7 +117,7 @@ Run the psql workflow from the repository root. Use forward slashes in `source_d
 ```powershell
 & "D:\Programs\Data Analysis\PostgreSQL\bin\psql.exe" `
   -U postgres `
-  -d PharmaMarketAnalytics_EDA_Test `
+  -d PharmaMarketAnalytics_EDA `
   -v "source_data_dir=E:/Data Analysis/My Projects/PharmaMarket Data Platform/PharmaMarket_EDA/source_data" `
   -f "run_full_eda.sql"
 ```
@@ -130,7 +130,7 @@ To validate an existing database without rebuilding it:
 ```powershell
 & "D:\Programs\Data Analysis\PostgreSQL\bin\psql.exe" `
   -U postgres `
-  -d PharmaMarketAnalytics_EDA_Test `
+  -d PharmaMarketAnalytics_EDA `
   -f "run_validation.sql"
 ```
 
@@ -143,7 +143,7 @@ You can also verify every analysis script with one psql command:
 ```powershell
 & "D:\Programs\Data Analysis\PostgreSQL\bin\psql.exe" `
   -U postgres `
-  -d PharmaMarketAnalytics_EDA_Test `
+  -d PharmaMarketAnalytics_EDA `
   -f "run_all_analysis.sql"
 ```
 

@@ -32,7 +32,7 @@ import pyodbc
 # ==========================
 
 SERVER = os.getenv("PHARMAMARKET_SQL_SERVER", r"DESKTOP-SJC0GQV\SQLEXPRESS")
-DATABASE = os.getenv("PHARMAMARKET_CLEAN_DATABASE", "PharmaMarketAnalytics_Clean_Test")
+DATABASE = os.getenv("PHARMAMARKET_CLEAN_DATABASE", "PharmaMarketAnalytics_Clean")
 ODBC_DRIVER = os.getenv("PHARMAMARKET_ODBC_DRIVER", "ODBC Driver 17 for SQL Server")
 OUTPUT_FOLDER = Path(
     os.getenv(

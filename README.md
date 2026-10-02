@@ -118,7 +118,7 @@ Run the psql workflow from the repository root. Use forward slashes in `source_d
 & "D:\Programs\Data Analysis\PostgreSQL\bin\psql.exe" `
   -U postgres `
   -d PharmaMarketAnalytics_EDA `
-  -v "source_data_dir=E:/Data Analysis/My Projects/PharmaMarket Data Platform/PharmaMarket_EDA/source_data" `
+  -v "source_data_dir=D:/Projects/PharmaMarket Data Platform/PharmaMarket_EDA/source_data" `
   -f "run_full_eda.sql"
 ```
 
